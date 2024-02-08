@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Math Scrabble</title>
+<style>
+    body {
+        font-family: Arial, sans-serif;
+    }
+    #tiles {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 10px;
+    }
+    .tile {
+        width: 50px;
+        height: 50px;
+        background-color: #f0f0f0;
+        border: 1px solid #ccc;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        font-size: 24px;
+        cursor: pointer;
+    }
+    #equation {
+        font-size: 24px;
+        margin-top: 20px;
+    }
+    #desiredAnswer {
+        font-size: 18px;
+        margin-top: 10px;
+    }
+    #submitBtn, #clearBtn {
+        padding: 10px 20px;
+        font-size: 16px;
+        cursor: pointer;
+    }
+</style>
+</head>
+<body>
+<h1>Math Scrabble</h1>
+<div id="tiles">
+    <div class="tile">0</div>
+    <div class="tile">1</div>
+    <div class="tile">2</div>
+    <div class="tile">3</div>
+    <div class="tile">4</div>
+    <div class="tile">5</div>
+    <div class="tile">6</div>
+    <div class="tile">7</div>
+    <div class="tile">8</div>
+    <div class="tile">9</div>
+    <div class="tile">+</div>
+    <div class="tile">-</div>
+    <div class="tile">*</div>
+    <div class="tile">/</div>
+    <div class="tile">(</div>
+    <div class="tile">)</div>
+</div>
+<div id="equation"></div>
+<div>Desired Answer: <span id="desiredAnswer"></span></div>
+<button id="submitBtn" style="display:none;">Submit</button>
+<button id="clearBtn" style="display:none;">Clear</button>
+
+<script>
+    // Function to prompt user to enter code
+    function enterCode() {
+        const code = prompt("Please enter the code to start the game:");
+        if (code !== "13") {
+            alert("Incorrect code. Please try again.");
+            enterCode(); // Retry if code is incorrect
+        } else {
+            // If code is correct, display game controls
+            document.getElementById('submitBtn').style.display = 'block';
+            document.getElementById('clearBtn').style.display = 'block';
+            startGame();
+        }
+    }
+
+    // Call function to enter code when page loads
+    enterCode();
+
+    const tiles = document.querySelectorAll('.tile');
+    const equationDiv = document.getElementById('equation');
+    const desiredAnswerSpan = document.getElementById('desiredAnswer');
+    const submitBtn = document.getElementById('submitBtn');
+    const clearBtn = document.getElementById('clearBtn');
+
+    let equation = '';
+    let desiredAnswer;
+
+    // Function to handle tile clicks
+    tiles.forEach(tile => {
+        tile.addEventListener('click', () => {
+            equation += tile.textContent;
+            updateEquation();
+        });
+    });
+
+    // Function to handle the submit button click
+    submitBtn.addEventListener('click', () => {
+        checkEquation();
+    });
+
+    // Function to handle the clear button click
+    clearBtn.addEventListener('click', () => {
+        equation = '';
+        updateEquation();
+    });
+
+    // Function to update the displayed equation
+    function updateEquation() {
+        equationDiv.textContent = equation;
+    }
+
+    // Function to generate the desired answer
+    function generateDesiredAnswer() {
+        desiredAnswer = Math.floor(Math.random() * 100); // Random desired answer between 0 and 99
+        desiredAnswerSpan.textContent = desiredAnswer;
+    }
+
+    // Function to check the equation against the desired answer
+    function checkEquation() {
+        try {
+            const result = eval(equation); // Evaluate the equation
+            if (!isNaN(result)) {
+                if (result === desiredAnswer) {
+                    alert("Congratulations! You've formed the correct equation to get the desired answer.");
+
+                    // Display code to unlock level 2
+                    alert("The code to unlock level 2 is 48");
+
+                    window.location.href = 'congratulations.html'; // Redirect to another page
+                } else {
+                    alert('Incorrect equation. Try again.');
+                }
+            } else {
+                throw new Error('Invalid equation');
+            }
+        } catch (error) {
+            alert('Invalid equation');
+        }
+    }
+
+    generateDesiredAnswer(); // Generate the desired answer when the page loads
+</script>
+</body>
+</html>
